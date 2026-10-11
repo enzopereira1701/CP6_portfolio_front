@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CP4 - Grid Layout</title>
+
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="logo">CHECKPOINT 04</div>
+        <nav class="nav-menu">
+            <a href="#inicio">Início</a>
+            <a href="#Galeria">Galeria</a>
+            <a href="#Depoimentos">Depoimentos</a>
+        </nav>
+    </header>
+
+    <main>
+        
+        <section class="secao-hero" id="inicio">
+            <div class="container container-hero">
+                <div class="hero-destaque">
+                    <img src="./assets/banner/01.jpg" alt="Vista panorâmica da ilha grega">
+                </div>
+                <div class="hero-texto">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla explicabo, quo, modi quod qui
+                        atque eaque repellendus est nisi voluptate facere.</p>
+                    <a href="#" class="btn-saiba-mais">Saiba mais</a>
+                </div>
+                <div class="hero-galeria">
+                    <div class="foto-item"><img src="./assets/banner/04.jpg" alt="Rua de pedras"></div>
+                    <div class="foto-item"><img src="./assets/banner/03.jpg" alt="Igreja com domo azul"></div>
+                    <div class="foto-item"><img src="./assets/banner/02.jpg" alt="Cadeira azul"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao-galeria-grid" id="Galeria">
+            <div class="galeria-grid-container">
+        
+                <div class="grid-img-item"><img src="./assets/sea/01.jpg" alt="Praia 1"></div>
+        
+        
+                <div class="grid-img-item span-row-2"><img src="./assets/sea/02.jpg" alt="Praia 2"></div>
+        
+        
+                <div class="grid-img-item"><img src="./assets/sea/03.jpg" alt="Praia 3"></div>
+        
+        
+                <div class="grid-img-item span-row-2"><img src="./assets/sea/02.jpg" alt="Praia 4"></div>
+        
+        
+                <div class="grid-img-item"><img src="./assets/sea/01.jpg" alt="Praia 5"></div>
+
+        
+                <div class="grid-img-item"><img src="./assets/sea/03.jpg" alt="Praia 6"></div>
+        
+        
+                <div class="grid-img-item"><img src="./assets/sea/01.jpg" alt="Praia 7"></div>
+        
+        
+                <div class="grid-img-item"><img src="./assets/sea/03.jpg" alt="Praia 8"></div>
+            </div>
+        </section>
+
+        <section class="secao-depoimentos" id="Depoimentos">
+            <div class="container container-depoimentos">
+
+        
+                <div class="box-titulo">
+                    <h2 class="titulo-depoimentos">Avaliação dos nossos clientes</h2>
+                </div>
+
+        
+                <div class="gallery">
+            
+                    <div class="box-depoimento card-1">
+                        <div class="foto-flutuante"><img src="./assets/users/01.jpg" alt="Cliente 1"></div>
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Neque laudantium necessitatibus dolores quam debitis? Molestiae nostrum quasi pariatur soluta fugit.</p>
+                    </div>
+
+            
+                    <div class="box-depoimento card-2">
+                        <div class="foto-flutuante"><img src="./assets/users/02.jpg" alt="Cliente 2"></div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, cum similique architecto quod praesentium ex!</p>
+                    </div>
+
+            
+                    <div class="box-depoimento card-3">
+                        <div class="foto-flutuante"><img src="./assets/users/03.jpg" alt="Cliente 3"></div>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores, blanditiis.</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+
+
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-col">
+            <h4>CHECKPOINT 04</h4>
+            <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Navegação</h4>
+            <p><a href="#inicio">Início</a></p>
+            <p><a href="#Galeria">Galeria</a></p>
+            <p><a href="#Depoimentos">Depoimentos</a></p>
+        </div>
+        <div class="footer-col">
+            <h4>Contato</h4>
+            <p>contato@fiap.com.br</p>
+            <p>(11) 4002-8922</p>
+            <p>São Paulo, SP</p>
+        </div>
+        <div class="footer-col column-redes">
+            <h4>Redes Sociais</h4>
+            <div class="social-buttons">
+
+                <a href="#" class="social-btn btn-insta" title="Instagram">
+                    <img src="./assets/instagram.png" alt="Logo Instagram">
+                </a>
+
+                <a href="#" class="social-btn btn-whats" title="WhatsApp">
+                    <img src="./assets/whatsapp.png" alt="Logo WhatsApp">
+                </a>
+            </div>
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
