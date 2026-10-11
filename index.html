@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enzo Borgo Pereira</title>
+  <meta name="description" content="Portfólio de Enzo Borgo Pereira, estudante de Engenharia de Software na FIAP. Sites feitos com HTML, CSS, Bootstrap e Tailwind.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN, como no material da aula -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      /* paleta da PerskCookies: roxo, amarelo e laranja */
+      --color-noite: #24104A;
+      --color-roxo: #6A35C9;
+      --color-violeta: #7B45D6;
+      --color-amarelo: #FFC83D;
+      --color-laranja: #FF7A30;
+      --color-lavanda: #F1EBFC;
+      --color-creme: #FFFBF5;
+      --color-tinta: #22173A;
+      --color-cinza: #5F5672;
+
+      --font-titulo: "Abril Fatface", Georgia, serif;
+      --font-texto: "Lato", Arial, sans-serif;
+    }
+
+    /* foco visível para quem navega pelo teclado */
+    a:focus-visible {
+      outline: 2px solid var(--color-laranja);
+      outline-offset: 4px;
+    }
+
+    /* ---------- Palco: páginas abertas em leque ---------- */
+    .palco {
+      background:
+        radial-gradient(55% 50% at 50% 40%, rgb(123 69 214 / 0.85) 0%, transparent 70%),
+        radial-gradient(70% 35% at 50% 105%, rgb(255 122 48 / 0.35) 0%, transparent 70%),
+        var(--color-noite);
+    }
+
+    .leque {
+      perspective: 1800px;
+      aspect-ratio: 16 / 7.4;
+    }
+
+    .pagina {
+      position: absolute;
+      top: 0;
+      width: 30%;
+      transition: transform 0.9s cubic-bezier(.2,.7,.2,1), left 0.9s cubic-bezier(.2,.7,.2,1), right 0.9s cubic-bezier(.2,.7,.2,1);
+      box-shadow: 0 40px 60px -30px rgb(10 0 30 / 0.7);
+      -webkit-box-reflect: below 6px linear-gradient(transparent 72%, rgb(255 255 255 / 0.16));
+    }
+
+    .pagina img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .pagina-esq  { left: 4%;  top: 7%; transform: rotateY(38deg) translateZ(-60px); transform-origin: right center; }
+    .pagina-meio { left: 35%; z-index: 2; transform: translateZ(40px); }
+    .pagina-dir  { right: 4%; top: 7%; transform: rotateY(-38deg) translateZ(-60px); transform-origin: left center; }
+
+    .pagina-esq:hover  { transform: rotateY(28deg) translateZ(-20px); }
+    .pagina-meio:hover { transform: translateZ(70px); }
+    .pagina-dir:hover  { transform: rotateY(-28deg) translateZ(-20px); }
+
+    /* único movimento automático: as páginas abrem em leque ao carregar */
+    .js .leque:not(.aberto) .pagina-esq { left: 35%; top: 0; transform: none; }
+    .js .leque:not(.aberto) .pagina-dir { right: 35%; top: 0; transform: none; }
+
+    @media (max-width: 639px) {
+      .leque { aspect-ratio: 16 / 12; }
+      .pagina { width: 46%; }
+      .pagina-esq  { left: -6%; }
+      .pagina-meio { left: 27%; }
+      .pagina-dir  { right: -6%; }
+      .js .leque:not(.aberto) .pagina-esq { left: 27%; }
+      .js .leque:not(.aberto) .pagina-dir { right: 27%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pagina { transition: none; }
+    }
+
+    /* marcador das listas: pequeno quadrado laranja */
+    .lista-marcada li {
+      position: relative;
+      padding-left: 1.1rem;
+    }
+    .lista-marcada li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 6px;
+      height: 6px;
+      background: var(--color-laranja);
+    }
+
+    /* ---------- Navbar: texto que "rola" no hover ---------- */
+    .rolar {
+      display: inline-block;
+      height: 1.5em;
+      overflow: hidden;
+      line-height: 1.5em;
+      vertical-align: top;
+    }
+    .rolar > span {
+      display: block;
+      transition: transform 0.35s cubic-bezier(.6,0,.2,1);
+    }
+    a:hover .rolar > span,
+    a:focus-visible .rolar > span {
+      transform: translateY(-100%);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rolar > span { transition: none; }
+    }
+
+    /* ---------- Carrossel de fotos das experiências ---------- */
+    .trilho { scrollbar-width: none; scroll-behavior: smooth; }
+    .trilho::-webkit-scrollbar { display: none; }
+    @media (prefers-reduced-motion: reduce) { .trilho { scroll-behavior: auto; } }
+
+    /* desfoque na parte de baixo do card, como na referência */
+    .vidro {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      mask-image: linear-gradient(to top, #000 45%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 100%);
+    }
+  </style>
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="bg-creme font-texto text-tinta antialiased">
+
+  <!-- ===================== NAVBAR FLUTUANTE ===================== -->
+  <header class="fixed inset-x-0 top-4 z-50 flex justify-center px-3">
+    <nav aria-label="Seções" class="flex items-center gap-1 rounded-full bg-[#1A0B36]/95 p-1.5 text-creme shadow-[0_18px_40px_-12px_rgb(20_5_45/0.55)] ring-1 ring-white/10 backdrop-blur sm:gap-2">
+      <a href="#inicio" class="grid size-10 shrink-0 place-items-center rounded-full bg-amarelo font-titulo text-lg text-noite sm:size-11" aria-label="Ir para o início">EB</a>
+
+      <ul class="flex items-center text-sm sm:px-2 sm:text-[0.95rem]">
+          <li>
+            <a href="#projetos" class="block px-3 py-2">
+              <span class="rolar"><span>Projetos</span><span class="text-amarelo" aria-hidden="true">Projetos</span></span>
+            </a>
+          </li>
+          <li>
+            <a href="#sobre" class="block px-3 py-2">
+              <span class="rolar"><span>Sobre</span><span class="text-amarelo" aria-hidden="true">Sobre</span></span>
+            </a>
+          </li>
+          <li class="hidden sm:block">
+            <a href="#trajetoria" class="block px-3 py-2">
+              <span class="rolar"><span>Trajetória</span><span class="text-amarelo" aria-hidden="true">Trajetória</span></span>
+            </a>
+          </li>
+      </ul>
+
+      <a href="mailto:enzopereira1701@gmail.com" class="hidden rounded-full bg-creme px-5 py-2.5 text-[0.95rem] text-tinta transition-colors hover:bg-amarelo md:block">
+        enzopereira1701@gmail.com
+      </a>
+      <a href="#contato" class="rounded-full bg-creme px-4 py-2.5 text-sm font-bold text-tinta transition-colors hover:bg-amarelo md:hidden">
+        Contato
+      </a>
+    </nav>
+  </header>
+
+  <!-- ===================== TOPO ===================== -->
+  <div class="palco overflow-hidden text-creme">
+
+    <section id="inicio" class="mx-auto max-w-6xl px-5 pt-32 md:px-10 md:pt-40">
+      <div class="grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-end">
+        <h1 class="font-titulo text-[3.1rem] leading-[0.95] sm:text-7xl lg:text-[5.75rem] xl:text-[6.75rem]">
+          Enzo Borgo<br>Pereira
+        </h1>
+        <p class="max-w-md text-lg leading-relaxed text-creme/85 lg:pb-3">
+          Estudante de Engenharia de Software na FIAP. Transformo layouts em sites que
+          funcionam do celular ao desktop, com HTML, CSS, Bootstrap e Tailwind.
+        </p>
+      </div>
+
+      <!-- leque com os três sites -->
+      <div id="leque" class="leque relative mx-auto mt-14 w-full md:mt-20">
+        <a href="projetos/revisao-novacore/index.html" target="_blank" rel="noopener" class="pagina pagina-esq" aria-label="Abrir o site NovaCore em nova aba">
+          <img src="assets/img/novacore-pagina.webp" alt="Página completa do site NovaCore">
+        </a>
+        <a href="projetos/bootstrap-grao-nobre/index.html" target="_blank" rel="noopener" class="pagina pagina-meio" aria-label="Abrir o site Grão Nobre em nova aba">
+          <img src="assets/img/grao-nobre-pagina.webp" alt="Página completa do site Grão Nobre">
+        </a>
+        <a href="projetos/tailwind-fio-e-prensa/index.html" target="_blank" rel="noopener" class="pagina pagina-dir" aria-label="Abrir o site Fio &amp; Prensa em nova aba">
+          <img src="assets/img/fio-e-prensa-pagina.webp" alt="Página completa do site Fio &amp; Prensa">
+        </a>
+      </div>
+    </section>
+
+    <!-- espaço para o reflexo das páginas -->
+    <div class="h-20 sm:h-32 md:h-40" aria-hidden="true"></div>
+  </div>
+
+  <main>
+
+    <!-- ===================== PROJETOS ===================== -->
+    <section id="projetos" class="mx-auto max-w-6xl scroll-mt-6 px-5 py-20 md:px-10 md:py-28">
+      <h2 class="font-titulo text-4xl md:text-6xl">Projetos realizados</h2>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-cinza">
+        Os três sites das últimas aulas de Front-End. Cada um partiu de um briefing com cores,
+        fontes e estrutura definidas, e foi resolvido com uma ferramenta diferente: CSS escrito
+        à mão, Bootstrap e Tailwind.
+      </p>
+
+      <div class="mt-14 border-t border-tinta/15">
+
+        <!-- NovaCore -->
+        <article class="grid gap-6 border-b border-tinta/15 py-12 md:grid-cols-[15rem_1fr] md:gap-12">
+          <div>
+            <h3 class="font-titulo text-3xl">NovaCore</h3>
+            <p class="mt-2 text-sm text-cinza">Atividade de revisão</p>
+            <a href="projetos/revisao-novacore/index.html" target="_blank" rel="noopener" class="mt-5 inline-block text-sm font-bold text-roxo underline decoration-laranja decoration-2 underline-offset-[6px] hover:text-tinta">Abrir site</a>
+          </div>
+
+          <div class="max-w-2xl min-w-0">
+            <p class="text-lg leading-relaxed">
+              Landing page de uma empresa fictícia de soluções digitais. A atividade era revisar
+              tudo o que vimos antes dos frameworks, então cada parte foi escrita à mão, só com
+              HTML e um arquivo de CSS.
+            </p>
+
+            <div class="mt-8 grid gap-8 sm:grid-cols-2">
+              <div>
+                <h4 class="text-sm font-bold text-roxo">O que tem no site</h4>
+                <ul class="lista-marcada mt-3 space-y-2 text-[0.95rem] leading-relaxed text-cinza">
+                  <li>Menu com links que rolam até cada seção</li>
+                  <li>Abertura com chamada e botão “Quero conhecer”</li>
+                  <li>Seis serviços em cards: web, mobile, automação, integrações, dados e UX</li>
+                  <li>Seção sobre a empresa e três depoimentos de clientes</li>
+                  <li>Formulário de contato e rodapé com links, telefone e endereço</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-roxo">O que pratiquei</h4>
+                <ul class="lista-marcada mt-3 space-y-2 text-[0.95rem] leading-relaxed text-cinza">
+                  <li>Estrutura semântica com header, nav, main, section e footer</li>
+                  <li>Flexbox para o menu, os cards e o rodapé</li>
+                  <li>Classes reutilizáveis para títulos, textos e botões</li>
+                  <li>Efeitos de hover e transições nos botões</li>
+                  <li>Media query para adaptar o layout a telas de até 700px</li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="mt-8 text-sm text-cinza"><span class="font-bold text-tinta">Tecnologias:</span> HTML, CSS, Flexbox e fonte Poppins</p>
+
+            <div class="mt-10" data-carrossel>
+              <div class="mb-4 flex items-center justify-between gap-4">
+                <p class="text-sm font-bold text-roxo">Seções do site</p>
+                <div class="flex gap-2">
+                  <button type="button" data-anterior class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Seções anteriores do NovaCore">
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                  </button>
+                  <button type="button" data-proximo class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Próximas seções do NovaCore">
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <ul class="trilho -mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto px-2 pt-1 pb-4" aria-label="Seções do site NovaCore" tabindex="0">
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/novacore-abertura.webp" alt="Abertura do site NovaCore no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Abertura</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Menu e chamada com o botão “Quero conhecer”</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/novacore-abertura.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/novacore-servicos.webp" alt="Seção de serviços do NovaCore no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Serviços</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Seis serviços apresentados em cards</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/novacore-servicos.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/novacore-sobre.webp" alt="Seção sobre nós do NovaCore no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Sobre nós</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Apresentação da empresa e da equipe</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/novacore-sobre.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/novacore-depoimentos.webp" alt="Depoimentos de clientes do NovaCore no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Depoimentos</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Três clientes falando da parceria</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/novacore-depoimentos.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/novacore-contato.webp" alt="Formulário de contato do NovaCore no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Contato</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Formulário com nome, e-mail, empresa e mensagem</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/novacore-contato.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/novacore-rodape.webp" alt="Rodapé do NovaCore no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Rodapé</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Links, telefone e endereço</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/novacore-rodape.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Grão Nobre -->
+        <article class="grid gap-6 border-b border-tinta/15 py-12 md:grid-cols-[15rem_1fr] md:gap-12">
+          <div>
+            <h3 class="font-titulo text-3xl">Grão Nobre</h3>
+            <p class="mt-2 text-sm text-cinza">Atividade de Bootstrap</p>
+            <a href="projetos/bootstrap-grao-nobre/index.html" target="_blank" rel="noopener" class="mt-5 inline-block text-sm font-bold text-roxo underline decoration-laranja decoration-2 underline-offset-[6px] hover:text-tinta">Abrir site</a>
+          </div>
+
+          <div class="max-w-2xl min-w-0">
+            <p class="text-lg leading-relaxed">
+              Site de uma torrefação fictícia que vende cafés especiais por assinatura. O desafio
+              era reproduzir um layout usando apenas os componentes e as classes do Bootstrap 5,
+              sem nenhuma linha de CSS ou JavaScript próprio.
+            </p>
+
+            <div class="mt-8 grid gap-8 sm:grid-cols-2">
+              <div>
+                <h4 class="text-sm font-bold text-roxo">O que tem no site</h4>
+                <ul class="lista-marcada mt-3 space-y-2 text-[0.95rem] leading-relaxed text-cinza">
+                  <li>Navbar escura que vira menu “hambúrguer” no celular</li>
+                  <li>Botão “Comprar agora” que abre um modal para escolher o pedido: kit de degustação, 1 ou 5 pacotes</li>
+                  <li>Abertura com título, texto e foto do café</li>
+                  <li>Carrossel de depoimentos com avaliação em estrelas</li>
+                  <li>Perguntas frequentes que abrem e fecham em accordion</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-roxo">O que pratiquei</h4>
+                <ul class="lista-marcada mt-3 space-y-2 text-[0.95rem] leading-relaxed text-cinza">
+                  <li>Grid de 12 colunas com row e col para dividir a página</li>
+                  <li>Componentes prontos: navbar, modal, carousel e accordion</li>
+                  <li>Classes utilitárias de espaçamento, cor e tipografia</li>
+                  <li>Imagem com proporção fixa usando ratio e object-fit</li>
+                  <li>JavaScript do Bootstrap para os componentes interativos</li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="mt-8 text-sm text-cinza"><span class="font-bold text-tinta">Tecnologias:</span> HTML e Bootstrap 5.3</p>
+
+            <div class="mt-10" data-carrossel>
+              <div class="mb-4 flex items-center justify-between gap-4">
+                <p class="text-sm font-bold text-roxo">Seções do site</p>
+                <div class="flex gap-2">
+                  <button type="button" data-anterior class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Seções anteriores do Grão Nobre">
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                  </button>
+                  <button type="button" data-proximo class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Próximas seções do Grão Nobre">
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <ul class="trilho -mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto px-2 pt-1 pb-4" aria-label="Seções do site Grão Nobre" tabindex="0">
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/grao-abertura.webp" alt="Abertura do site Grão Nobre no celular" class="absolute inset-0 size-full object-contain" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Abertura</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Navbar, título, texto e foto do café</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/grao-abertura.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/grao-menu.webp" alt="Menu do Grão Nobre aberto no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Menu no celular</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Os links recolhidos no botão de menu</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/grao-menu.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/grao-depoimentos.webp" alt="Carrossel de depoimentos do Grão Nobre no celular" class="absolute inset-0 size-full object-contain" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Depoimentos</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Carrossel com avaliação em estrelas</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/grao-depoimentos.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/grao-faq.webp" alt="Perguntas frequentes do Grão Nobre no celular" class="absolute inset-0 size-full object-contain" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Perguntas frequentes</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Accordion com uma resposta aberta</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/grao-faq.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/grao-modal.webp" alt="Modal de pedido do Grão Nobre aberto no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Modal de pedido</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Abre ao tocar em “Comprar agora”</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/grao-modal.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Fio & Prensa -->
+        <article class="grid gap-6 border-b border-tinta/15 py-12 md:grid-cols-[15rem_1fr] md:gap-12">
+          <div>
+            <h3 class="font-titulo text-3xl">Fio &amp; Prensa</h3>
+            <p class="mt-2 text-sm text-cinza">Atividade de Tailwind</p>
+            <a href="projetos/tailwind-fio-e-prensa/index.html" target="_blank" rel="noopener" class="mt-5 inline-block text-sm font-bold text-roxo underline decoration-laranja decoration-2 underline-offset-[6px] hover:text-tinta">Abrir site</a>
+          </div>
+
+          <div class="max-w-2xl min-w-0">
+            <p class="text-lg leading-relaxed">
+              Site de um ateliê fictício de encadernação artesanal. O briefing trazia a paleta
+              (verde profundo, off-white, vermelho e dourado) e as fontes Fraunces e Work Sans;
+              todo o visual foi construído com classes utilitárias do Tailwind CSS 4.
+            </p>
+
+            <div class="mt-8 grid gap-8 sm:grid-cols-2">
+              <div>
+                <h4 class="text-sm font-bold text-roxo">O que tem no site</h4>
+                <ul class="lista-marcada mt-3 space-y-2 text-[0.95rem] leading-relaxed text-cinza">
+                  <li>Menu com botão “Agendar visita”</li>
+                  <li>Abertura com a lista de materiais usados nas capas</li>
+                  <li>O ofício contado em quatro etapas: dobra, costura, colagem e prensagem</li>
+                  <li>Galeria de peças recentes em grid, com imagens de tamanhos diferentes</li>
+                  <li>Depoimento de cliente e bloco com endereço, horário e contato</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-roxo">O que pratiquei</h4>
+                <ul class="lista-marcada mt-3 space-y-2 text-[0.95rem] leading-relaxed text-cinza">
+                  <li>Tema próprio no @theme, com as cores e fontes do briefing</li>
+                  <li>Grid de 2, 3 e 4 colunas que se reorganiza com o prefixo md:</li>
+                  <li>Galeria montada com grid-cols e grid-rows</li>
+                  <li>Bordas, divisórias e cores com transparência</li>
+                  <li>Estados de hover nos links e botões</li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="mt-8 text-sm text-cinza"><span class="font-bold text-tinta">Tecnologias:</span> HTML e Tailwind CSS 4</p>
+
+            <div class="mt-10" data-carrossel>
+              <div class="mb-4 flex items-center justify-between gap-4">
+                <p class="text-sm font-bold text-roxo">Seções do site</p>
+                <div class="flex gap-2">
+                  <button type="button" data-anterior class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Seções anteriores do Fio &amp; Prensa">
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                  </button>
+                  <button type="button" data-proximo class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Próximas seções do Fio &amp; Prensa">
+                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <ul class="trilho -mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto px-2 pt-1 pb-4" aria-label="Seções do site Fio &amp; Prensa" tabindex="0">
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/fio-abertura.webp" alt="Abertura do site Fio &amp; Prensa no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Abertura</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Título, texto e materiais das capas</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/fio-abertura.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/fio-oficio.webp" alt="Seção do ofício em quatro etapas no celular" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">O ofício</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">As quatro etapas da encadernação</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/fio-oficio.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/fio-pecas.webp" alt="Galeria de peças recentes do Fio &amp; Prensa no celular" class="absolute inset-0 size-full object-contain" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Peças recentes</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Galeria em grid com tamanhos diferentes</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/fio-pecas.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/fio-depoimento.webp" alt="Depoimento de cliente do Fio &amp; Prensa no celular" class="absolute inset-0 size-full object-contain" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Depoimento</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Relato de uma cliente do ateliê</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/fio-depoimento.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+                <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                  <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                    <img src="assets/img/secoes/fio-contato.webp" alt="Bloco de contato do Fio &amp; Prensa no celular" class="absolute inset-0 size-full object-contain" style="object-position: center top" loading="lazy">
+                    <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                      <p class="font-titulo text-[1.7rem] leading-tight">Visite o ateliê</p>
+                      <p class="mt-1 text-sm leading-snug text-creme/80">Endereço, horário e contato</p>
+                      <p class="mt-3 flex items-center gap-1.5 text-sm"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Tela de celular</p>
+                      <a href="assets/img/secoes/fio-contato.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver print inteiro</a>
+                    </figcaption>
+                  </figure>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <p class="mt-10 max-w-2xl leading-relaxed text-cinza">
+        Também fiz, em dupla com Yannick Davila Parreira, o
+        <a href="projetos/cp04-grid-layout/index.html" target="_blank" rel="noopener" class="font-bold text-roxo underline decoration-laranja decoration-2 underline-offset-4 hover:text-tinta">Checkpoint 04</a>,
+        um exercício de CSS Grid: banner, galeria de cinco fotos, depoimentos e rodapé em colunas,
+        com media queries para celular e tablet.
+      </p>
+    </section>
+
+    <!-- ===================== SOBRE ===================== -->
+    <section id="sobre" class="bg-lavanda">
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-[15rem_1fr] md:gap-12 md:px-10 md:py-28">
+        <h2 class="font-titulo text-4xl md:text-6xl">Sobre</h2>
+
+        <div class="max-w-2xl">
+          <p class="text-2xl leading-snug font-light md:text-[1.7rem]">
+            Estudo Engenharia de Software na FIAP e gosto da parte em que um layout
+            estático vira uma página de verdade no navegador.
+          </p>
+          <p class="mt-6 text-lg leading-relaxed text-cinza">
+            Antes do código, vim do desenho: fiz arte digital, adesivos e ilustrações sob encomenda,
+            e hoje crio as embalagens da minha própria loja de cookies. Esse olhar para composição
+            e cor é o que levo para o front-end.
+          </p>
+          <p class="mt-4 text-lg leading-relaxed text-cinza">
+            Na faculdade aprendi a estruturar páginas com HTML semântico, a montar layouts com Flexbox
+            e Grid e a adaptá-los para telas pequenas. Nas últimas aulas usei o Bootstrap, com componentes
+            prontos, e o Tailwind, com classes utilitárias e tema próprio. O próximo passo é JavaScript,
+            e estou procurando um estágio para aprender com um time.
+          </p>
+
+          <dl class="mt-12 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+            <div>
+              <dt class="font-bold">Estrutura e layout</dt>
+              <dd class="mt-1 text-cinza">HTML semântico, CSS, Flexbox, Grid e responsividade</dd>
+            </div>
+            <div>
+              <dt class="font-bold">Frameworks</dt>
+              <dd class="mt-1 text-cinza">Bootstrap 5 e Tailwind CSS 4</dd>
+            </div>
+            <div>
+              <dt class="font-bold">Ferramentas</dt>
+              <dd class="mt-1 text-cinza">Git, GitHub e VS Code</dd>
+            </div>
+            <div>
+              <dt class="font-bold">Idiomas</dt>
+              <dd class="mt-1 text-cinza">Português nativo e inglês intermediário</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TRAJETÓRIA ===================== -->
+    <section id="trajetoria">
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-[15rem_1fr] md:gap-12 md:px-10 md:py-28">
+        <h2 class="font-titulo text-4xl md:text-6xl">Trajetória</h2>
+
+        <div class="max-w-3xl min-w-0 space-y-16">
+
+          <!-- Experiência -->
+          <div>
+            <h3 class="font-bold text-roxo">Experiência</h3>
+            <ol class="mt-5 border-t border-tinta/15">
+
+              <li class="grid gap-2 border-b border-tinta/15 py-10 sm:grid-cols-[8rem_1fr] sm:gap-8">
+                <p class="text-sm text-cinza">Atual</p>
+                <div class="min-w-0">
+                  <p class="font-titulo text-3xl">PerskCookies</p>
+                  <p class="mt-1 text-cinza">
+                    Empreendedor, loja de cookies artesanais. No Instagram:
+                    <a href="https://www.instagram.com/perskcookies/" target="_blank" rel="noopener" class="font-bold text-roxo underline decoration-laranja decoration-2 underline-offset-4 hover:text-tinta">@perskcookies</a>
+                  </p>
+                  <p class="mt-5 text-lg leading-relaxed">
+                    Criei e tenho a minha própria loja de cookies artesanais. Como faço tudo sozinho,
+                    participo de todas as etapas do negócio, da cozinha até o cliente.
+                  </p>
+
+                  <dl class="mt-6 space-y-5">
+                    <div>
+                      <dt class="font-bold">Produção</dt>
+                      <dd class="mt-1 leading-relaxed text-cinza">Preparo as massas e os recheios, asso os cookies e embalo cada pedido.</dd>
+                    </div>
+                    <div>
+                      <dt class="font-bold">Marca e design</dt>
+                      <dd class="mt-1 leading-relaxed text-cinza">Crio o design das embalagens e das etiquetas da loja, com a paleta roxa, amarela e laranja que também uso neste site.</dd>
+                    </div>
+                    <div>
+                      <dt class="font-bold">Clientes e gestão</dt>
+                      <dd class="mt-1 leading-relaxed text-cinza">Faço o atendimento aos clientes e cuido da organização financeira do negócio.</dd>
+                    </div>
+                  </dl>
+
+                  <div class="mt-8" data-carrossel>
+                    <div class="mb-4 flex justify-end gap-2">
+                      <button type="button" data-anterior class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Fotos anteriores de PerskCookies">
+                        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                      </button>
+                      <button type="button" data-proximo class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Próximas fotos de PerskCookies">
+                        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                      </button>
+                    </div>
+                    <ul class="trilho -mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto px-2 pt-1 pb-4" aria-label="Fotos de PerskCookies" tabindex="0">
+                    <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                      <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                        <img src="assets/img/experiencia/cookies-cardapio.webp" alt="Cardápio da PerskCookies em roxo e laranja, com os seis sabores e seus preços" class="absolute inset-0 size-full object-cover" style="object-position: top" loading="lazy">
+                        <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                        <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                          <p class="font-titulo text-[1.7rem] leading-tight">Cardápio</p>
+                          <p class="mt-1 text-sm leading-snug text-creme/80">Os seis sabores da loja</p>
+                          <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm"><span class="flex items-center gap-1.5"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>R$ 10 a R$ 13 (un)</span></p>
+                          <a href="assets/img/experiencia/cookies-cardapio.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver foto inteira</a>
+                        </figcaption>
+                      </figure>
+                    </li>
+                    <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                      <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                        <img src="assets/img/experiencia/cookies-duo-nutella-kinder.webp" alt="Cookies Duo Nutella e Kinder embalados em papel, com as etiquetas da loja" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                        <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                        <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                          <p class="font-titulo text-[1.7rem] leading-tight">Duo Nutella e Kinder</p>
+                          <p class="mt-1 text-sm leading-snug text-creme/80">Embalados, com as etiquetas da loja</p>
+                          <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm"><span class="flex items-center gap-1.5"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>R$ 12 e R$ 13 (un)</span></p>
+                          <a href="assets/img/experiencia/cookies-duo-nutella-kinder.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver foto inteira</a>
+                        </figcaption>
+                      </figure>
+                    </li>
+                    <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                      <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                        <img src="assets/img/experiencia/cookies-kinder.webp" alt="Cookie Kinder com pedaço de Kinder Bueno em cima, ao lado de um pote de Nutella" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                        <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                        <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                          <p class="font-titulo text-[1.7rem] leading-tight">Kinder</p>
+                          <p class="mt-1 text-sm leading-snug text-creme/80">Recheio de Kinder Bueno</p>
+                          <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm"><span class="flex items-center gap-1.5"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>R$ 13,00 (un)</span></p>
+                          <a href="assets/img/experiencia/cookies-kinder.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver foto inteira</a>
+                        </figcaption>
+                      </figure>
+                    </li>
+                    <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                      <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                        <img src="assets/img/experiencia/cookies-nutella.webp" alt="Cookie de Nutella embalado, na frente de um pote de Nutella" class="absolute inset-0 size-full object-cover" style="object-position: center top" loading="lazy">
+                        <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                        <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                          <p class="font-titulo text-[1.7rem] leading-tight">Nutella</p>
+                          <p class="mt-1 text-sm leading-snug text-creme/80">Massa tradicional com chocolate ao leite e recheio de Nutella</p>
+                          <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm"><span class="flex items-center gap-1.5"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>R$ 12,00 (un)</span></p>
+                          <a href="assets/img/experiencia/cookies-nutella.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver foto inteira</a>
+                        </figcaption>
+                      </figure>
+                    </li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+
+              <li class="grid gap-2 border-b border-tinta/15 py-10 sm:grid-cols-[8rem_1fr] sm:gap-8">
+                <p class="text-sm text-cinza">2024</p>
+                <div class="min-w-0">
+                  <p class="font-titulo text-3xl">Arte e ilustração</p>
+                  <p class="mt-1 text-cinza">Empreendedor, artista autônomo</p>
+                  <p class="mt-5 text-lg leading-relaxed">
+                    Minha primeira experiência como empreendedor. Produzia e vendia vários tipos de
+                    arte, tanto feitas à mão quanto digitais.
+                  </p>
+
+                  <dl class="mt-6 space-y-5">
+                    <div>
+                      <dt class="font-bold">Técnicas</dt>
+                      <dd class="mt-1 leading-relaxed text-cinza">Desenho com marcadores à base de álcool, arte digital e grafite.</dd>
+                    </div>
+                    <div>
+                      <dt class="font-bold">Produtos</dt>
+                      <dd class="mt-1 leading-relaxed text-cinza">Desenhos, adesivos e artes digitais personalizadas para pôsteres, camisetas e outras peças.</dd>
+                    </div>
+                  </dl>
+
+                  <div class="mt-8" data-carrossel>
+                    <div class="mb-4 flex justify-end gap-2">
+                      <button type="button" data-anterior class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Fotos anteriores de arte e ilustração">
+                        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                      </button>
+                      <button type="button" data-proximo class="grid size-10 place-items-center rounded-full border border-tinta/20 transition-colors hover:border-roxo hover:text-roxo disabled:opacity-30 disabled:hover:border-tinta/20 disabled:hover:text-tinta" aria-label="Próximas fotos de arte e ilustração">
+                        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                      </button>
+                    </div>
+                    <ul class="trilho -mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto px-2 pt-1 pb-4" aria-label="Fotos de arte e ilustração" tabindex="0">
+                    <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                      <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                        <img src="assets/img/experiencia/arte-semana-arte-moderna.webp" alt="Cartaz da Semana da Arte Moderna com títulos em lettering de grafite azul e vermelho" class="absolute inset-0 size-full object-contain" style="object-position: center 6%" loading="lazy">
+                        <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                        <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                          <p class="font-titulo text-[1.7rem] leading-tight">Semana da Arte Moderna</p>
+                          <p class="mt-1 text-sm leading-snug text-creme/80">Cartaz com lettering no estilo grafite, feito à mão</p>
+                          <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm"><span class="flex items-center gap-1.5"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>2024</span></p>
+                          <a href="assets/img/experiencia/arte-semana-arte-moderna.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver foto inteira</a>
+                        </figcaption>
+                      </figure>
+                    </li>
+                    <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                      <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                        <img src="assets/img/experiencia/arte-dm-store.webp" alt="Grafite das letras DM em tons de cinza, com a palavra Store embaixo" class="absolute inset-0 size-full object-cover" style="object-position: center 40%" loading="lazy">
+                        <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                        <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                          <p class="font-titulo text-[1.7rem] leading-tight">DM Store</p>
+                          <p class="mt-1 text-sm leading-snug text-creme/80">Grafite com lettering em parede</p>
+                          <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm"><span class="flex items-center gap-1.5"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Spray e marcador</span></p>
+                          <a href="assets/img/experiencia/arte-dm-store.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver foto inteira</a>
+                        </figcaption>
+                      </figure>
+                    </li>
+                    <li class="w-[15rem] shrink-0 snap-start sm:w-[16.5rem]">
+                      <figure class="relative aspect-[3/5] overflow-hidden rounded-[1.75rem] bg-noite shadow-[0_20px_40px_-20px_rgb(36_16_74/0.6)] ring-4 ring-white">
+                        <img src="assets/img/experiencia/arte-dm-store-pintando.webp" alt="Enzo de costas finalizando o grafite da DM Store com um marcador" class="absolute inset-0 size-full object-cover" style="object-position: center 45%" loading="lazy">
+                        <div class="vidro absolute inset-x-0 bottom-0 h-[55%] bg-linear-to-t from-noite/95 via-noite/70 to-noite/10" aria-hidden="true"></div>
+                        <figcaption class="absolute inset-x-0 bottom-0 p-5 text-creme">
+                          <p class="font-titulo text-[1.7rem] leading-tight">Mão na massa</p>
+                          <p class="mt-1 text-sm leading-snug text-creme/80">Finalizando o grafite da DM Store</p>
+                          <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm"><span class="flex items-center gap-1.5"><svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Marcador</span></p>
+                          <a href="assets/img/experiencia/arte-dm-store-pintando.webp" target="_blank" rel="noopener" class="mt-4 block rounded-full bg-creme py-3 text-center text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Ver foto inteira</a>
+                        </figcaption>
+                      </figure>
+                    </li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+
+            </ol>
+          </div>
+
+          <!-- Formação -->
+          <div>
+            <h3 class="font-bold text-roxo">Formação</h3>
+            <ol class="mt-5 border-t border-tinta/15">
+
+              <li class="grid gap-2 border-b border-tinta/15 py-8 sm:grid-cols-[8rem_1fr] sm:gap-8">
+                <p class="text-sm text-cinza">2026 – 2029</p>
+                <div>
+                  <p class="font-titulo text-3xl">FIAP</p>
+                  <p class="mt-1 text-cinza">Bacharelado em Engenharia de Software, cursando o 2º semestre</p>
+                </div>
+              </li>
+
+              <li class="grid gap-2 border-b border-tinta/15 py-8 sm:grid-cols-[8rem_1fr] sm:gap-8">
+                <p class="text-sm text-cinza">2022 – 2025</p>
+                <div>
+                  <p class="font-titulo text-3xl">Yázigi</p>
+                  <p class="mt-1 text-cinza">Curso de inglês, interrompido no nível intermediário</p>
+                  <p class="mt-4 max-w-xl leading-relaxed">
+                    Estudei de 2022 a 2025 e decidi parar quando percebi que o que me faltava era
+                    conversação e prática real com outras pessoas. Vi a oportunidade de fazer um curso
+                    de inglês específico para a minha área, engenharia de software.
+                  </p>
+                </div>
+              </li>
+
+              <li class="grid gap-2 border-b border-tinta/15 py-8 sm:grid-cols-[8rem_1fr] sm:gap-8">
+                <p class="text-sm text-cinza">2019 – 2025</p>
+                <div>
+                  <p class="font-titulo text-3xl">Colégio Guglielmo Marconi</p>
+                  <p class="mt-1 text-cinza">Ensino fundamental II e ensino médio, do 6º ano ao 3º ano</p>
+                </div>
+              </li>
+
+            </ol>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== CONTATO + FOOTER ===================== -->
+  <footer id="contato" class="overflow-hidden bg-noite text-creme">
+    <div class="mx-auto max-w-6xl px-5 pt-20 md:px-10 md:pt-28">
+
+      <h2 class="max-w-3xl font-titulo text-4xl leading-tight md:text-6xl">
+        Tem uma vaga de estágio ou um projeto? Me escreva.
+      </h2>
+      <a href="mailto:enzopereira1701@gmail.com" class="mt-8 inline-block text-2xl font-bold break-all text-amarelo underline decoration-laranja decoration-2 underline-offset-8 hover:text-creme sm:text-4xl">
+        enzopereira1701@gmail.com
+      </a>
+
+      <div class="mt-20 grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-[1fr_auto_auto] md:gap-20">
+        <div class="col-span-2 md:col-span-1">
+          <ul class="flex gap-3">
+            <li>
+              <a href="https://github.com/enzopereira1701" target="_blank" rel="noopener" class="grid size-11 place-items-center rounded-full border border-creme/30 transition-colors hover:border-amarelo hover:text-amarelo" aria-label="GitHub">
+                <svg class="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/enzopereira1701/" target="_blank" rel="noopener" class="grid size-11 place-items-center rounded-full border border-creme/30 transition-colors hover:border-amarelo hover:text-amarelo" aria-label="LinkedIn">
+                <svg class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4v11H3v-11Zm6.5 0h3.8v1.5h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1v5.46h-4v-4.84c0-1.16-.02-2.64-1.61-2.64-1.61 0-1.86 1.26-1.86 2.56v4.92h-4v-11Z"/></svg>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/perskcookies/" target="_blank" rel="noopener" class="grid size-11 place-items-center rounded-full border border-creme/30 transition-colors hover:border-amarelo hover:text-amarelo" aria-label="Instagram da PerskCookies">
+                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+              </a>
+            </li>
+          </ul>
+          <p class="mt-6 max-w-xs leading-relaxed text-creme/75">
+            Estudante de Engenharia de Software na FIAP, em busca de estágio em front-end.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-amarelo">Navegação</h3>
+          <ul class="mt-4 space-y-2.5 text-creme/80">
+            <li><a href="#inicio" class="hover:text-amarelo">Início</a></li>
+            <li><a href="#projetos" class="hover:text-amarelo">Projetos</a></li>
+            <li><a href="#sobre" class="hover:text-amarelo">Sobre</a></li>
+            <li><a href="#trajetoria" class="hover:text-amarelo">Trajetória</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-amarelo">Projetos</h3>
+          <ul class="mt-4 space-y-2.5 text-creme/80">
+            <li><a href="projetos/revisao-novacore/index.html" target="_blank" rel="noopener" class="hover:text-amarelo">NovaCore</a></li>
+            <li><a href="projetos/bootstrap-grao-nobre/index.html" target="_blank" rel="noopener" class="hover:text-amarelo">Grão Nobre</a></li>
+            <li><a href="projetos/tailwind-fio-e-prensa/index.html" target="_blank" rel="noopener" class="hover:text-amarelo">Fio &amp; Prensa</a></li>
+            <li><a href="projetos/cp04-grid-layout/index.html" target="_blank" rel="noopener" class="hover:text-amarelo">Checkpoint 04</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- linha que termina no botão -->
+      <div class="mt-16 flex items-center">
+        <span class="h-px flex-1 bg-creme/30"></span>
+        <a href="#inicio" class="rounded-full bg-creme px-5 py-2 text-sm font-bold text-tinta transition-colors hover:bg-amarelo">Voltar ao topo</a>
+      </div>
+
+      <div class="mt-6 flex flex-col gap-2 text-sm text-creme/60 sm:flex-row sm:justify-between">
+        <p>© <span id="ano">2026</span> Enzo Borgo Pereira</p>
+        <p>Feito com HTML e Tailwind CSS</p>
+      </div>
+    </div>
+
+    <!-- assinatura gigante, cortada na borda de baixo -->
+    <p class="mt-10 -mb-[0.28em] flex justify-center font-titulo text-[19vw] leading-none whitespace-nowrap text-[#4A2A8A] select-none" aria-hidden="true">
+      enzo borgo
+    </p>
+  </footer>
+
+  <script>
+    // abre o leque de páginas logo depois do carregamento
+    const leque = document.getElementById('leque');
+    window.addEventListener('load', () => setTimeout(() => leque.classList.add('aberto'), 200));
+
+    // carrosséis de fotos: setas passam um card por vez
+    document.querySelectorAll('[data-carrossel]').forEach((carrossel) => {
+      const trilho = carrossel.querySelector('.trilho');
+      const anterior = carrossel.querySelector('[data-anterior]');
+      const proximo = carrossel.querySelector('[data-proximo]');
+      const passo = () => trilho.querySelector('li').offsetWidth + 16;
+
+      const atualizar = () => {
+        anterior.disabled = trilho.scrollLeft <= 4;
+        proximo.disabled = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
+      };
+
+      anterior.addEventListener('click', () => trilho.scrollBy({ left: -passo() }));
+      proximo.addEventListener('click', () => trilho.scrollBy({ left: passo() }));
+      trilho.addEventListener('scroll', atualizar, { passive: true });
+      // recalcula quando o layout muda (inclusive quando o Tailwind termina de aplicar os estilos)
+      new ResizeObserver(atualizar).observe(trilho);
+      window.addEventListener('load', atualizar);
+      atualizar();
+    });
+
+    // ano atual no rodapé
+    document.getElementById('ano').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
